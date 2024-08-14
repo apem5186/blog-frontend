@@ -61,13 +61,18 @@
         목록
       </button>
     </div>
+    <Comment :board_id="idx" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import Comment from "./Comment.vue";
 
 export default {
+  components: {
+    Comment,
+  },
   computed: {
     ...mapGetters(["getUserRole"]),
     isAdmin() {
