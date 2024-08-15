@@ -29,11 +29,28 @@
     <div class="comment-list">
       <h3>Comments</h3>
       <ul>
-        <li v-for="comment in comments" :key="comment.id" class="comment-item">
-          <p class="comment-author">{{ comment.author }}</p>
+        <ol v-for="comment in comments" :key="comment.id" class="comment-item">
+          <div class="comment-top">
+            <span>
+              {{ comment.author }}
+            </span>
+            <span>
+              <span class="comment-date">{{ comment.created_at }}</span>
+              <span v-if="isCurrentUser(comment.author)">
+                |
+                <i
+                  class="bi bi-trash-fill delete-icon"
+                  @click="confirmDelete(comment.id)"
+                >
+                  Delete</i
+                >
+                |
+                <i class="bi bi-pencil-square edit-icon"> Edit</i>
+              </span>
+            </span>
+          </div>
           <p class="comment-content">{{ comment.content }}</p>
-          <p class="comment-date">{{ comment.created_at }}</p>
-        </li>
+        </ol>
       </ul>
     </div>
   </div>
@@ -117,6 +134,31 @@ export default {
           console.error("Failed to submit comment:", error);
         });
     },
+    isCurrentUser(author) {
+      return this.getUserName === author;
+    },
+    confirmDelete(commentId) {
+      const confirmation = confirm("댓글을 삭제하시겠습니까?");
+      if (confirmation) {
+        this.deleteComment(commentId);
+      }
+    },
+    deleteComment(commentId) {
+      this.$axios
+        .delete(`${this.$serverUrl}/comment/delete`, {
+          params: {
+            commentId: commentId,
+            username: this.userName,
+          },
+        })
+        .then(() => {
+          alert("삭제되었습니다.");
+          this.loadComments();
+        })
+        .catch((err) => {
+          console.error("댓글 삭제 실패 : " + err);
+        });
+    },
     goToLogin() {
       this.$router.push("/login");
     },
@@ -161,21 +203,46 @@ export default {
 }
 
 .comment-item {
+  padding: 0;
   margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+  border: 1px solid #eee;
 }
 
-.comment-author {
+.comment-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px 0 8px;
   font-weight: bold;
+  background-color: rgb(228, 241, 228);
+}
+
+.comment-top span {
+  display: inline-flex;
+  align-items: center;
 }
 
 .comment-content {
+  padding-left: 8px;
   margin: 5px 0;
 }
 
 .comment-date {
   font-size: 0.85em;
   color: #777;
+  margin-right: 10px;
+}
+
+.delete-icon,
+.edit-icon {
+  font-size: 0.85em;
+  color: #777;
+  font-style: normal;
+  cursor: pointer;
+  margin: 5px 5px;
+}
+.delete-icon:hover,
+.edit-icon:hover {
+  color: tomato;
 }
 </style>

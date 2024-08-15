@@ -41,6 +41,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     store.commit("LOADING_STATUS", false); // 에러 시 LOADING_STATUS 설정
 
+    // 에러 뒷처리, 추후 error code로 error 분류예정
     if (
       error.response &&
       (error.response.status === 401 || error.response.status === 403)
