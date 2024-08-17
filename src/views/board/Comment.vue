@@ -289,6 +289,10 @@ export default {
   margin-top: 20px;
 }
 
+li {
+  list-style-type: none;
+}
+
 .comment-item {
   padding: 0;
   margin-bottom: 15px;
