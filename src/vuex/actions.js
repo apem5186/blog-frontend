@@ -1,5 +1,6 @@
 // src/vuex/actions.js
 import {
+  USER_IDX,
   USER_ID,
   USER_NAME,
   IS_AUTH,
@@ -8,6 +9,11 @@ import {
   ERROR_STATE,
 } from "./mutation_types";
 import loginAPI from "../service/loginAPI";
+
+let setUserIdx = ({ commit }, data) => {
+  console.log("setting user IDX : " + data);
+  commit(USER_IDX, data);
+};
 
 let setUserId = ({ commit }, data) => {
   console.log("setting user ID : " + data);
@@ -44,6 +50,7 @@ let processResponse = (store, loginResponse) => {
       setIsAuth(store, false);
       break;
     default:
+      setUserIdx(store, loginResponse.data.user_idx);
       setUserId(store, loginResponse.data.user_id);
       setUserName(store, loginResponse.data.user_name);
       setErrorState(store, "");

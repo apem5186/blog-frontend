@@ -71,6 +71,7 @@ export default {
         if (err.message.indexOf("Network Error") > -1) {
           alert("서버에 접속할 수 없습니다. 상태를 확인해주세요.");
         } else {
+          console.error("ERROR : " + err);
           alert("로그인 정보를 확인할 수 없습니다.");
         }
       }

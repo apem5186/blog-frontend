@@ -2,6 +2,9 @@
 import * as types from "./mutation_types";
 
 export default {
+  [types.USER_IDX](state, userIdx) {
+    state.userIdx = userIdx;
+  },
   [types.USER_ID](state, userId) {
     state.userId = userId;
   },

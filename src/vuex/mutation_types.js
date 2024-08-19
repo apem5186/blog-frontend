@@ -1,4 +1,5 @@
 // src/vuex/mutation_types.js
+export const USER_IDX = "USER_IDX";
 export const USER_ID = "USER_ID";
 export const USER_NAME = "USER_NAME";
 export const ERROR_STATE = "ERROR_STATE";

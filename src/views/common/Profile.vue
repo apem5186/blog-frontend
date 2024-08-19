@@ -26,6 +26,7 @@ import ProfileBoard from "./profile_components/ProfileBoard.vue";
 import ProfileCategory from "./profile_components/ProfileCategory.vue";
 import ProfileComments from "./profile_components/ProfileComments.vue";
 import ProfileUserInfo from "./profile_components/ProfileUserInfo.vue";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -34,10 +35,21 @@ export default {
     ProfileBoard,
     ProfileComments,
   },
+  computed: {
+    ...mapGetters(["getUserRole"]),
+    isAdmin() {
+      return this.getUserRole === "ROLE_ADMIN";
+    },
+    menuItems() {
+      // If the user is an admin, show all menu items; otherwise, only show 'Profile'
+      return this.isAdmin
+        ? ["프로필", "카테고리", "게시글", "댓글"]
+        : ["프로필"];
+    },
+  },
   data() {
     return {
-      selectedMenu: null, // 선택된 메뉴를 추적하기 위한 상태
-      menuItems: ["프로필", "카테고리", "게시글", "댓글"], // 메뉴 항목 배열
+      selectedMenu: null, // 상태를 추적하기 위한 변수
     };
   },
   methods: {

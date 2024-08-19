@@ -37,6 +37,14 @@
       <span>{{ contents }}</span>
     </div>
     <div class="common-buttons">
+      <i
+        class="bi"
+        :class="isLiked ? 'bi-heart-fill' : 'bi-heart'"
+        @click="toggleLike"
+        style="cursor: pointer; color: red; font-size: 24px"
+      ></i>
+      <div style="flex-grow: 1"></div>
+      <!-- 이 div는 좋아요 버튼을 왼쪽에 고정시키기 위해 추가 -->
       <button
         type="button"
         class="w3-button w3-round w3-blue-gray"
@@ -74,9 +82,13 @@ export default {
     Comment,
   },
   computed: {
-    ...mapGetters(["getUserRole"]),
+    ...mapGetters(["getUserRole", "getUserIdx"]),
     isAdmin() {
       return this.getUserRole === "ROLE_ADMIN";
+    },
+    userIdx() {
+      console.log("USER IDX : " + this.getUserIdx);
+      return this.getUserIdx;
     },
   },
   data() {
@@ -88,10 +100,14 @@ export default {
       author: "",
       contents: "",
       created_at: "",
+      isLiked: false, // 좋아요 상태
+      likeCount: 0, // 좋아요 개수
     };
   },
   mounted() {
     this.fnGetView();
+    this.checkIfLiked(); // 현재 사용자가 이미 좋아요를 눌렀는지 확인
+    this.getLikeCount(); // 좋아요 갯수 확인
   },
   methods: {
     fnGetView() {
@@ -139,6 +155,67 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    getLikeCount() {
+      this.$axios
+        .get(`${this.$serverUrl}/board/like/count/` + this.idx)
+        .then((res) => {
+          this.likeCount = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    checkIfLiked() {
+      // 좋아요 상태를 확인하는 API 호출
+      this.$axios
+        .get(`${this.$serverUrl}/board/like/check`, {
+          params: {
+            boardId: this.idx,
+            userId: this.userIdx,
+          },
+        })
+        .then((res) => {
+          this.isLiked = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    toggleLike() {
+      const likeDto = {
+        // backend에서 property-naming-strategy: SNAKE_CASE로 해놔서 board_id, user_id 이렇게 해야함
+        // checkIfLiked에서는 param으로 전달해서 그럴필요없음
+        board_id: Number(this.idx),
+        user_id: this.userIdx,
+      };
+
+      if (this.isLiked) {
+        // 이미 좋아요가 눌린 상태일 때
+        this.$axios
+          .delete(`${this.$serverUrl}/board/like`, { data: likeDto })
+          .then(() => {
+            this.isLiked = false;
+            this.likeCount--;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        // 좋아요가 눌리지 않은 상태일 때
+        this.$axios
+          .post(`${this.$serverUrl}/board/like`, likeDto)
+          .then(() => {
+            this.isLiked = true;
+            this.likeCount++;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
   },
 };
