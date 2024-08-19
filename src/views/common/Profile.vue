@@ -14,6 +14,7 @@
       </span>
     </div>
     <hr />
+    <ProfileComments v-if="selectedMenu === 3" />
     <ProfileBoard v-if="selectedMenu === 2" />
     <ProfileCategory v-if="selectedMenu === 1" />
     <ProfileUserInfo v-if="selectedMenu === 0" />
@@ -23,6 +24,7 @@
 <script>
 import ProfileBoard from "./profile_components/ProfileBoard.vue";
 import ProfileCategory from "./profile_components/ProfileCategory.vue";
+import ProfileComments from "./profile_components/ProfileComments.vue";
 import ProfileUserInfo from "./profile_components/ProfileUserInfo.vue";
 
 export default {
@@ -30,6 +32,7 @@ export default {
     ProfileCategory,
     ProfileUserInfo,
     ProfileBoard,
+    ProfileComments,
   },
   data() {
     return {
