@@ -29,7 +29,27 @@
           v-on:click="fnView(`${row.idx}`)"
         >
           <h2 class="post-title">
-            <a>{{ row.title }}</a>
+            <div class="title-container">
+              <a class="post-title-text">{{ row.title }}</a>
+              <div class="icon-container">
+                <i
+                  class="bi"
+                  :class="row.liked ? 'bi-heart-fill' : 'bi-heart'"
+                  style="cursor: pointer; color: red; font-size: 14px"
+                ></i>
+                <span class="like-count">{{ row.like_count }}</span>
+                <i
+                  class="bi bi-eye-fill"
+                  style="
+                    user-select: none;
+                    color: #999;
+                    font-size: 16px;
+                    margin-left: 8px;
+                  "
+                ></i>
+                <span class="view-count"> {{ row.view_count }} </span>
+              </div>
+            </div>
           </h2>
           <p class="post-contents">{{ row.contents }}</p>
           <p class="post-author">
@@ -153,6 +173,9 @@ export default {
       keyword: this.$route.query.keyword,
       isCategorySelected: false, // 카테고리 선택 플래그
       selectedCategory: null, // 선택된 카테고리
+      isLiked: false, // 좋아요 상태
+      likeCount: 0, // 좋아요 개수
+      viewCount: 0, // 조회수 개수
       paginavigation: function () {
         // 페이징 처리 for문 커스텀
         let pageNumber = [];
@@ -308,6 +331,36 @@ export default {
 .board-list {
   margin-left: 10%;
   text-align: left; /* 기본 텍스트 정렬을 왼쪽으로 설정 */
+}
+
+.view-count,
+.like-count {
+  margin-left: 0.25em;
+  font-weight: bold;
+  font-size: 0.75em;
+}
+
+.post-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.post-title-text {
+  flex: 1;
+  text-align: left;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
 }
 
 .post-summary {
