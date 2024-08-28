@@ -14,9 +14,11 @@
       </span>
     </div>
     <hr />
-    <ProfileComments v-if="selectedMenu === 3" />
-    <ProfileBoard v-if="selectedMenu === 2" />
-    <ProfileCategory v-if="selectedMenu === 1" />
+    <ProfileComments v-if="selectedMenu === 3 && this.isAdmin" />
+    <ProfileBoard v-if="selectedMenu === 2 && this.isAdmin" />
+    <ProfileComments_user v-if="selectedMenu === 2 && !this.isAdmin" />
+    <ProfileCategory v-if="selectedMenu === 1 && this.isAdmin" />
+    <ProfileBoard_liked v-if="selectedMenu === 1 && !this.isAdmin" />
     <ProfileUserInfo v-if="selectedMenu === 0" />
   </div>
 </template>
@@ -26,6 +28,8 @@ import ProfileBoard from "./profile_components/ProfileBoard.vue";
 import ProfileCategory from "./profile_components/ProfileCategory.vue";
 import ProfileComments from "./profile_components/ProfileComments.vue";
 import ProfileUserInfo from "./profile_components/ProfileUserInfo.vue";
+import ProfileComments_user from "./profile_components/ProfileComments_user.vue";
+import ProfileBoard_liked from "./profile_components/ProfileBoard_liked.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -34,17 +38,22 @@ export default {
     ProfileUserInfo,
     ProfileBoard,
     ProfileComments,
+    ProfileComments_user,
+    ProfileBoard_liked,
   },
   computed: {
-    ...mapGetters(["getUserRole"]),
+    ...mapGetters(["getUserRole", "getIsLogin"]),
     isAdmin() {
       return this.getUserRole === "ROLE_ADMIN";
+    },
+    isLogin() {
+      return this.getIsLogin;
     },
     menuItems() {
       // If the user is an admin, show all menu items; otherwise, only show 'Profile'
       return this.isAdmin
         ? ["프로필", "카테고리", "게시글", "댓글"]
-        : ["프로필"];
+        : ["프로필", "좋아요", "댓글"];
     },
   },
   data() {
@@ -52,10 +61,19 @@ export default {
       selectedMenu: null, // 상태를 추적하기 위한 변수
     };
   },
+  mounted() {
+    this.redirectToLogin();
+  },
   methods: {
     selectMenu(index) {
       // 동일한 메뉴를 클릭하면 선택 해제, 아니면 선택
       this.selectedMenu = this.selectedMenu === index ? null : index;
+    },
+    redirectToLogin() {
+      if (!this.isLogin) {
+        alert("로그인 후 이용가능합니다.");
+        this.$router.push("/login");
+      }
     },
   },
 };

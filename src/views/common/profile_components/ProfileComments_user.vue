@@ -78,6 +78,7 @@
 
 <script>
 import axiosInstance from "@/utils/axios";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -91,6 +92,10 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["getUserName"]),
+    username() {
+      return this.getUserName;
+    },
     visiblePages() {
       const startPage =
         Math.floor((this.currentPage - 1) / this.pageWindowSize) *
@@ -115,9 +120,8 @@ export default {
         page: this.currentPage,
         size: this.pageSize,
       };
-
       axiosInstance
-        .get(`${this.$serverUrl}/comment/comments`, { params })
+        .get(`${this.$serverUrl}/comment/comments/${this.username}`, { params })
         .then((response) => {
           this.comments = response.data.content; // 댓글 리스트
           this.totalPages = response.data.total_pages; // 전체 페이지 수
