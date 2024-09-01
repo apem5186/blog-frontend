@@ -22,7 +22,7 @@
       >
         Submit
       </button>
-      <button v-else @click="goToLogin" class="submit-button">Login</button>
+      <button v-else @click="goToLogin()" class="submit-button">Login</button>
     </div>
 
     <!-- Comment List -->
@@ -164,7 +164,7 @@ export default {
         return;
       }
 
-      this.newComment.boardId = this.boardId;
+      this.newComment.board_id = this.board_id;
 
       axiosInstance
         .post(`${this.$serverUrl}/comment`, this.newComment)
@@ -246,9 +246,9 @@ export default {
           console.error("댓글 수정 실패:", error);
         });
     },
-  },
-  goToLogin() {
-    this.$router.push("/login");
+    goToLogin() {
+      this.$router.push("/login");
+    },
   },
 };
 </script>

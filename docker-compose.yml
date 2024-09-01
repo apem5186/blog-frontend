@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .  # Current directory (frontend folder)
+    ports:
+      - "8080:80"
