@@ -8,7 +8,7 @@
           <i class="bi bi-person-circle profile-icon" @click="toggleMenu"></i>
           <div v-if="menuVisible" class="dropdown-menu">
             <router-link to="/profile">상세정보</router-link>
-            <router-link to="/">그냥넣어봄</router-link>
+            <router-link to="/">그냥넣어봄ㅋㅋ</router-link>
             <a @click="fnLogout">로그아웃</a>
           </div>
         </div>
