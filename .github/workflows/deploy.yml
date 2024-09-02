@@ -35,6 +35,16 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/blog-frontend:latest
 
+      - name: Set correct permissions on EC2 target directory
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            mkdir -p /home/${{ secrets.EC2_USER }}
+            chmod 755 /home/${{ secrets.EC2_USER }}
+
       - name: Copy docker-compose.yml to EC2
         uses: appleboy/scp-action@v0.1.1
         with:
@@ -42,7 +52,9 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "./docker-compose.yml"
-          target: "/home/${{ secrets.EC2_USER }}/docker-compose.yml"
+          target: "/home/${{ secrets.EC2_USER }}/"
+          port: 22
+          overwrite: true
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
