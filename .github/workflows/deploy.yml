@@ -52,6 +52,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-            docker pull blog-frontend:latest
+            docker pull apem5186/blog-frontend:latest
             cd /home/${{ secrets.EC2_USER }}
             docker-compose -f docker-compose.yml up -d frontend
