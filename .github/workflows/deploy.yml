@@ -51,7 +51,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} --password-stdin
+            echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/blog-frontend:latest
             cd /home/${{ secrets.EC2_USER }}
             chmod 644 docker-compose.yml
