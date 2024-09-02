@@ -4,6 +4,6 @@ services:
   frontend:
     build:
       context: . # Current directory (frontend folder)
-    image: ${{ secrets.DOCKER_HUB_USERNAME }}/blog-frontend
+    image: blog-frontend
     ports:
       - "8080:80"
