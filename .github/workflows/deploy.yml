@@ -32,19 +32,16 @@ jobs:
           docker-compose -f docker-compose.yml build
           docker-compose -f docker-compose.yml push
 
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Copy docker-compose.yml to EC2
+        uses: appleboy/scp-action@v0.1.1
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "docker-compose.yml"
           target: "/home/${{ secrets.EC2_USER }}/docker-compose.yml"
-          script: |
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/blog-frontend-frontend:latest
-            docker-compose -f docker-compose.yml up -d frontend
 
-      - name: Run Deployment on EC2
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
