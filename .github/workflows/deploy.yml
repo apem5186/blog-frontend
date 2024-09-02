@@ -39,5 +39,5 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker pull your-dockerhub-username/blog-frontend:latest
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/blog-frontend:latest
             docker-compose -f docker-compose.yml up -d frontend
