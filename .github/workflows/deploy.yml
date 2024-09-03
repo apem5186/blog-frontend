@@ -16,11 +16,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # - name: Install Docker Compose
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y docker-compose
-
       - name: Log in to DockerHub
         uses: docker/login-action@v1
         with:
@@ -37,26 +32,6 @@ jobs:
     needs: build
 
     steps:
-      # - name: Set correct permissions on EC2 target directory
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ${{ secrets.EC2_USER }}
-      #     key: ${{ secrets.EC2_SSH_KEY }}
-      #     script: |
-      #       mkdir -p /home/${{ secrets.EC2_USER }}
-      #       chmod 755 /home/${{ secrets.EC2_USER }}
-
-      # - name: Copy docker-compose.yml to EC2
-      #   uses: appleboy/scp-action@v0.1.1
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ${{ secrets.EC2_USER }}
-      #     key: ${{ secrets.EC2_SSH_KEY }}
-      #     source: "./docker-compose.yml"
-      #     target: "/home/${{ secrets.EC2_USER }}/docker-compose.yml"
-      #     port: 22
-      #     overwrite: true
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -64,14 +39,18 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd blog-frontend
-            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/blog-frontend:latest
-            sudo docker stop
-            sudo docker run -d -p 8080:80 ${{ secrets.DOCKER_HUB_USERNAME }}/blog-frontend:latest
-            sudo docker image prune -a
+            # Log in to Docker on EC2
+            echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
-        # echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-        # docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/blog-frontend:latest
-        # cd /home/${{ secrets.EC2_USER }}
-        # chmod 644 docker-compose.yml
-        # docker-compose -f docker-compose.yml up -d frontend
+            # Pull the latest Docker image
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/blog-frontend:latest
+
+            # Stop any existing container (assuming it's named 'blog-frontend')
+            docker stop blog-frontend || true
+            docker rm blog-frontend || true
+
+            # Run the Docker container with proper configuration
+            docker run -d --name blog-frontend -p 8080:80 ${{ secrets.DOCKER_HUB_USERNAME }}/blog-frontend:latest
+
+            # Clean up unused images
+            docker image prune -f
