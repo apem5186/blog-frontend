@@ -40,6 +40,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+            cd blog-frontend
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/blog-frontend:latest
 
             # Stop and remove existing containers
