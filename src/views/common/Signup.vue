@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     async submitForm() {
-      const apiUrl = "http://localhost:8081/user/save";
+      const apiUrl = `${this.$serverUrl}/user/save`;
       const form = {
         user_id: this.user_id,
         user_name: this.user_name,

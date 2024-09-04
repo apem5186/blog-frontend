@@ -7,7 +7,9 @@ const getUserInfo = (userId, userPw) => {
     user_pw: userPw,
   };
 
-  let serverUrl = "//localhost:8081";
+  //let serverUrl = "//localhost:8081";
+  let serverUrl =
+    "//ec2-43-201-145-111.ap-northeast-2.compute.amazonaws.com:8081"; // 배포용 서버 Url
 
   return axios.post(serverUrl + "/user/login", reqData, {
     headers: {
