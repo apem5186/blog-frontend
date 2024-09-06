@@ -74,10 +74,7 @@ export default {
           .then(() => {
             // Update the state with the new values
             this.$store.commit("SET_USER_NAME", this.editUserName);
-            console.log("now username : " + this.userName);
-            console.log(
-              "localStorage username : " + window.localStorage.getItem("vuex")
-            );
+
             // End the editing mode
             this.isEditing = false;
 
