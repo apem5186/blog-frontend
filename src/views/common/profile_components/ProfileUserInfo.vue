@@ -62,7 +62,7 @@ export default {
       };
       // Add logic here to save the updated user information
       // For example, send a POST request to the server to update user details
-      if (this.userName.equals(this.editUserName)) {
+      if (this.userName === this.editUserName) {
         alert("같은 닉네임으로 변경할 수 없습니다.");
       } else {
         this.$axios
