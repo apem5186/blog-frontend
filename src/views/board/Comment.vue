@@ -115,6 +115,7 @@ export default {
       newComment: {
         author: "",
         content: "",
+        user_idx: "",
         board_id: this.board_id, // Will be set to the current board's ID
       },
       canSubmit: false, // 댓글 입력 여부
@@ -124,6 +125,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      "getUserId",
       "getUserName",
       "getErrorState",
       "getIsLogin",
@@ -131,6 +133,9 @@ export default {
     ]),
     isLogin() {
       return this.getIsLogin;
+    },
+    userId() {
+      return this.getUserId;
     },
     userName() {
       return this.getUserName;
@@ -140,6 +145,7 @@ export default {
     this.loadComments();
     if (this.isLogin) {
       this.newComment.author = this.userName;
+      this.newComment.user_idx = this.userId;
     }
   },
   methods: {
