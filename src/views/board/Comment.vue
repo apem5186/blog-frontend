@@ -125,7 +125,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      "getUserId",
+      "getUserIdx",
       "getUserName",
       "getErrorState",
       "getIsLogin",
@@ -134,8 +134,8 @@ export default {
     isLogin() {
       return this.getIsLogin;
     },
-    userId() {
-      return this.getUserId;
+    userIdx() {
+      return this.getUserIdx;
     },
     userName() {
       return this.getUserName;
@@ -145,7 +145,7 @@ export default {
     this.loadComments();
     if (this.isLogin) {
       this.newComment.author = this.userName;
-      this.newComment.user_idx = this.userId;
+      this.newComment.user_idx = this.userIdx;
     }
   },
   methods: {
