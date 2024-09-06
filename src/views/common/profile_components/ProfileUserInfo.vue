@@ -66,7 +66,7 @@ export default {
         alert("같은 닉네임으로 변경할 수 없습니다.");
       } else {
         this.$axios
-          .post(this.$serverUrl + "/user/update", form, {
+          .patch(this.$serverUrl + "/user/update", form, {
             headers: {
               "Content-Type": "application/json",
             },
