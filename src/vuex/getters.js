@@ -1,3 +1,4 @@
+// src/vuex/getters.js
 export default {
   getUserIdx: (state) => state.userIdx,
   getUserId: (state) => state.userId,

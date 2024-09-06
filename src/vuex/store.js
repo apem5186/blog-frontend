@@ -1,3 +1,4 @@
+// src/vuex/store.js
 import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import getters from "./getters";
@@ -6,13 +7,13 @@ import actions from "./actions";
 
 const store = createStore({
   state: {
-    userIdx: null,
-    userId: null,
-    userName: null,
+    userIdx: "",
+    userId: "",
+    userName: "",
     isAuth: false,
     isLogin: false,
-    userRole: null,
-    errorState: null,
+    userRole: "",
+    errorState: "",
     loadingStatus: false,
   },
   mutations,
