@@ -37,7 +37,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getUserName", "getUserRole"]),
+    ...mapGetters(["getUserId", "getUserName", "getUserRole"]),
+    userId() {
+      return this.getUserId;
+    },
     userName() {
       return this.getUserName;
     },
@@ -53,26 +56,35 @@ export default {
       }
     },
     saveUserInfo() {
+      const form = {
+        user_id: this.userId,
+        user_name: this.editUserName,
+      };
       // Add logic here to save the updated user information
       // For example, send a POST request to the server to update user details
+      if (this.userName.equals(this.editUserName)) {
+        alert("같은 닉네임으로 변경할 수 없습니다.");
+      } else {
+        this.$axios
+          .post(this.$serverUrl + "/user/update", form, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then(() => {
+            // Update the state with the new values
+            this.$store.commit("SET_USER_NAME", this.editUserName);
 
-      this.$axios
-        .post(this.$serverUrl + "/user/update", {
-          userName: this.editUserName,
-        })
-        .then(() => {
-          // Update the state with the new values
-          this.$store.commit("SET_USER_NAME", this.editUserName);
+            // End the editing mode
+            this.isEditing = false;
 
-          // End the editing mode
-          this.isEditing = false;
-
-          alert("User information updated successfully.");
-        })
-        .catch((error) => {
-          console.error("Failed to update user information:", error);
-          alert("Failed to update user information.");
-        });
+            alert("User information updated successfully.");
+          })
+          .catch((error) => {
+            console.error("Failed to update user information:", error);
+            alert("Failed to update user information.");
+          });
+      }
     },
   },
 };
