@@ -29,4 +29,7 @@ export default {
   SET_IS_LOGIN(state, status) {
     state.isLogin = status;
   },
+  SET_USER_NAME(state, userName) {
+    state.userName = userName;
+  },
 };
